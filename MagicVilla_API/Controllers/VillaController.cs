@@ -13,10 +13,16 @@ namespace MagicVilla_API.Controllers
     [ApiController]
     public class VillaController : ControllerBase
     {
+        private readonly ILogger<VillaController> _logger;
+        public VillaController(ILogger<VillaController> logger)
+        {
+            _logger = logger;
+        }
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<VillaDTO>> GetVillas()
         {
+            _logger.LogInformation("Obtener las villas");
             return Ok(VillaStore.villaList);
         }
         [HttpGet("id:int", Name="GetVilla")]
@@ -27,6 +33,7 @@ namespace MagicVilla_API.Controllers
         {
             if(id==0)
             {
+                _logger.LogError("Error al traer Villa con Id"+ id);
                 return BadRequest();
             }
             var villa = VillaStore.villaList.FirstOrDefault(v => v.Id == id);
@@ -81,12 +88,12 @@ namespace MagicVilla_API.Controllers
             VillaStore.villaList.Remove(villa);
             return NoContent();
         }
-        [HttpPut("{int:id}")]
+        [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult UpdateVilla(int id, [FromBody] VillaDTO villaDTO)
         {
-            if (villaDTO == null || id!=villaDTO.Id)
+            if (villaDTO == null || id != villaDTO.Id)
             {
                 return BadRequest();
             }
@@ -96,7 +103,7 @@ namespace MagicVilla_API.Controllers
             villa.MetrosCuadrados = villaDTO.MetrosCuadrados;
             return NoContent();
         }
-        [HttpPatch("{int:id}")]
+        [HttpPatch("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult UpdateVilla(int id, JsonPatchDocument<VillaDTO> patchDTo)
