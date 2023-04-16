@@ -25,7 +25,9 @@ namespace MagicVilla_API.Controllers
         private readonly IVillaRepositorio _villaRepo;
         private readonly IMapper _mapper;
         protected APIResponse _response;
-        public VillaController(ILogger<VillaController> logger, IVillaRepositorio villaRepo, IMapper mapper)
+        public VillaController(ILogger<VillaController> logger, 
+                               IVillaRepositorio villaRepo, 
+                               IMapper mapper)
         {
             _logger = logger;
             _villaRepo = villaRepo;
@@ -109,7 +111,7 @@ namespace MagicVilla_API.Controllers
                 //     ModelState.AddModelError("NombreExiste","La Villa con ese Nombre ya existe!");
                 //     return BadRequest(ModelState);
                 // }
-                if(await _villaRepo.Obtener(v=>v.Nombre.ToLower() == createDTO.Nombre.ToLower()) != null)
+                if(await _villaRepo.Obtener(v => v.Nombre.ToLower() == createDTO.Nombre.ToLower()) != null)
                 {
                     ModelState.AddModelError("NombreExiste","La Villa con ese Nombre ya existe!");
                     return BadRequest(ModelState);
