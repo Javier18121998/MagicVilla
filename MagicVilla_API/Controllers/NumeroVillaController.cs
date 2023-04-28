@@ -45,7 +45,7 @@ namespace MagicVilla_API.Controllers
             try
             {
                 _logger.LogInformation("Obtener Numeros villas");
-                IEnumerable<NumeroVilla> numeroVillaList = await _numeroRepo.ObtenerTodos();
+                IEnumerable<NumeroVilla> numeroVillaList = await _numeroRepo.ObtenerTodos(incluirPropiedades:"Villa");
                 _response.Resultado = _mapper.Map<IEnumerable<NumeroVillaDto>>(numeroVillaList);
                 // return Ok(_mapper.Map<IEnumerable<VillaDTO>>(villaList));
                 _response.statusCode = HttpStatusCode.OK;
@@ -60,7 +60,7 @@ namespace MagicVilla_API.Controllers
             }
             return _response;
         }
-        [HttpGet("id:int", Name="GetNumeroVilla")]
+        [HttpGet("{id:int}", Name="GetNumeroVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -76,7 +76,7 @@ namespace MagicVilla_API.Controllers
                     return BadRequest(_response);
                 }
                 //var villa = VillaStore.villaList.FirstOrDefault(v => v.Id == id);
-                var numeroVilla = await _numeroRepo.Obtener(v => v.VillaNo == id);
+                var numeroVilla = await _numeroRepo.Obtener(v => v.VillaNo == id, incluirPropiedades:"Villa");
                 if(numeroVilla==null)
                 {
                     _response.statusCode = HttpStatusCode.NotFound;
