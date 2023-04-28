@@ -15,7 +15,7 @@ namespace MagicVilla_Web.Services
     {
         public readonly IHttpClientFactory _httpClient;
         private string _villaUrl;
-        public VillaService(IHttpClientFactory httpClient, IConfiguration configuration) : base(httpClient)
+        public VillaService(IHttpClientFactory httpClient, IConfiguration configuration) :base(httpClient)
         {
             _httpClient = httpClient;
             _villaUrl = configuration.GetValue<string>("ServicesUrls:API_URL");
@@ -25,7 +25,7 @@ namespace MagicVilla_Web.Services
             return SendAsync<T>(new APIRequest(){
                 APITipo = DS.APITipo.PUT,
                 Datos = dto,
-                Url = _villaUrl+"/api/Villa"+dto.Id
+                Url = _villaUrl+"/api/Villa/"+dto.Id
             });
         }
         public Task<T> Crear<T>(VillaCreateDto dto)
@@ -40,7 +40,7 @@ namespace MagicVilla_Web.Services
         {
             return SendAsync<T>(new APIRequest(){
                 APITipo = DS.APITipo.GET,
-                Url = _villaUrl+"/api/Villa" + id
+                Url = _villaUrl+"/api/Villa/"+id
             });
         }
         public Task<T> ObtenerTodos<T>()
@@ -54,7 +54,7 @@ namespace MagicVilla_Web.Services
         {
             return SendAsync<T>(new APIRequest(){
                 APITipo = DS.APITipo.DELETE,
-                Url = _villaUrl+"/api/Villa" + id
+                Url = _villaUrl+"/api/Villa/" + id
             }); 
         }
     }

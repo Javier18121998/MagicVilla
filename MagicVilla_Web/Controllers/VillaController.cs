@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net;
 using AutoMapper;
 using MagicVilla_Web.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +46,53 @@ namespace MagicVilla_Web.Controllers
                 {
                     return RedirectToAction(nameof(IndexVilla));
                 }
+            }
+            return View(modelo);
+        }
+        
+        public async Task<IActionResult> ActualizarVilla(int villaId)
+        {
+            var response = await _villaService.Obtener<APIResponse>(villaId);
+            if (response != null && response.IsExitoso)
+            {
+                VillaDTO model = JsonConvert.DeserializeObject<VillaDTO>(Convert.ToString(response.Resultado));
+                return View(_mapper.Map<VillaUpdateDto>(model));
+            }
+            return NotFound();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ActualizarVilla(VillaUpdateDto modelo)
+        {
+            if (ModelState.IsValid)
+            {
+                var response = await _villaService.Actualizar<APIResponse>(modelo);
+                if (response != null && response.IsExitoso)
+                {
+                    return RedirectToAction(nameof(IndexVilla));
+                }
+            }
+            return View(modelo);
+        }
+        public async Task<IActionResult> RemoverVilla(int villaId)
+        {
+            var response = await _villaService.Obtener<APIResponse>(villaId);
+            if (response != null && response.IsExitoso)
+            {
+                VillaDTO model = JsonConvert.DeserializeObject<VillaDTO>(Convert.ToString(response.Resultado));
+                return View(model);
+            }
+            return NotFound();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RemoverVilla(VillaUpdateDto modelo)
+        {
+            
+            var response = await _villaService.Remover<APIResponse>(modelo.Id);
+            if (response != null && response.IsExitoso)
+            {
+                return RedirectToAction(nameof(IndexVilla));
             }
             return View(modelo);
         }
