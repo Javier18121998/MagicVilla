@@ -116,12 +116,12 @@ namespace MagicVilla_API.Controllers
                 // }
                 if(await _numeroRepo.Obtener(v=>v.VillaNo == createDTO.VillaNo) != null)
                 {
-                    ModelState.AddModelError("NombreExiste","El numero de Villa ya existe!");
+                    ModelState.AddModelError("ErrorMessages","El numero de Villa ya existe!");
                     return BadRequest(ModelState);
                 }
                 if( await _villaRepo.Obtener(v => v.Id == createDTO.VillaId) == null)
                 {
-                    ModelState.AddModelError("ClaveForanea","El Id de la Villa no existe!");
+                    ModelState.AddModelError("ErrorMessages","El Id de la Villa no existe!");
                     return BadRequest(ModelState);
                 }
                 if(createDTO == null)
@@ -209,7 +209,7 @@ namespace MagicVilla_API.Controllers
             }
             if(await _villaRepo.Obtener(v => v.Id == updateDTO.VillaId) == null)
             {
-                ModelState.AddModelError("ClaveForanea", "El Id de la Villa no Existe!");
+                ModelState.AddModelError("ErrorMessages", "El Id de la Villa no Existe!");
                 return BadRequest(ModelState);
             }
             // var villa = VillaStore.villaList.FirstOrDefault(v => v.Id == id);

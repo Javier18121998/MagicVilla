@@ -69,6 +69,7 @@ namespace MagicVilla_Web.Controllers
                 var response = await _villaService.Actualizar<APIResponse>(modelo);
                 if (response != null && response.IsExitoso)
                 {
+                    TempData["exitoso"] = "Villa Actualizada Exitosamente";
                     return RedirectToAction(nameof(IndexVilla));
                 }
             }
@@ -92,8 +93,10 @@ namespace MagicVilla_Web.Controllers
             var response = await _villaService.Remover<APIResponse>(modelo.Id);
             if (response != null && response.IsExitoso)
             {
+                TempData["exitoso"] = "Villa Removida Exitosamente";
                 return RedirectToAction(nameof(IndexVilla));
             }
+            TempData["error"] = "Ocurro un Error al Remover";
             return View(modelo);
         }
     }
